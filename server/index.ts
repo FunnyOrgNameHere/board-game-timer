@@ -147,6 +147,7 @@ const server = Bun.serve({
     message(ws, rawMsg) {
       try {
         const parsed = JSON.parse(rawMsg.toString());
+	console.log(rawMsg.toString());
         const { type } = parsed;
 
         if (type === 'joinRoom') {
@@ -226,7 +227,7 @@ const server = Bun.serve({
           if (!room) return;
           room.gameState.running = false;
 	  //Set all clocks to TIME_LIMIT
-	  room.gameState.timeLimit = time;
+	  room.gameState.timeLimit = time ? time : TIME_LIMIT;
 	  room.gameState.players.forEach((val, key, set) => {
 	  	room.gameState.players[key].remainingTime = room.gameState.timeLimit;
 	  });
