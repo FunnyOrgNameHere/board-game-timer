@@ -114,7 +114,9 @@ export default function App() {
 
 
   useEffect(() => {
-
+    if (gameState?.running === true) {
+      fireworksRef.current?.stop()
+    }
     if (gameState?.windex !== -1) {
       if (gameState?.players[gameState?.windex].name === username) {
         fireworksRef.current?.start()
@@ -175,7 +177,7 @@ export default function App() {
                 onChange={(e) => setUsername(e.target.value)}
                 style={{ padding: "0.3rem 0.5rem", fontSize: '1.5rem' }}
               />
-              <button onClick={handleJoinRoom} style={{ fontSize: "1.6rem", background: "green" }}>Join/Create Room</button>
+              <button onClick={handleJoinRoom} style={{ fontSize: "1.6rem", background: "green", color: "white" }}>Join/Create Room</button>
             </div>
           )
         }
