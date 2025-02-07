@@ -171,7 +171,7 @@ const server = Bun.serve({
 	//Replace playerId on existing player if they're already here.
 	let found = false;
 	  gameState.players.forEach((val, key, set) => {
-	  	if(val.name != username){return;}
+	  	if(val.name.toLowerCase() != username.toLowerCase()){return;}
 		gameState.players[key].id = playerId;
 		found = true;
 	  });
