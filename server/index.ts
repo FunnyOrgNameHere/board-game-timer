@@ -27,7 +27,7 @@ const TIMER_LIMIT = 1.2; // 1.2 minutes
 
 const TIME_LIMIT = TIMER_LIMIT * 60 * 1000; // 5 minutes
 //const MAX_PLAYERS = 3; // up to 6 players
-const rooms: Record<string, RoomState> = {};
+var rooms: Record<string, RoomState> = {};
 
 function createGameState(timeLimit: number): GameState {
   const players: Array<Player> = [];
@@ -246,7 +246,7 @@ const server = Bun.serve({
       const { roomId } = ws.data || {};
       if (roomId && rooms[roomId]) {
         rooms[roomId].connections.delete(ws);
-        if(rooms[roomId].connections.length < 1){rooms.delete(roomId)};
+        if(rooms[roomId].connections.length < 1){rooms = rooms.delete(roomId)};
       }
     },
   },
