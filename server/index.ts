@@ -14,6 +14,7 @@ interface GameState {
   lastTickTimestamp: number;
   running: boolean;
   timeLimit: number;
+  windex: number;
 }
 
 interface RoomState {
@@ -65,6 +66,7 @@ function handleTap(gameState: GameState, playerId: string) {
   if (!gameState.running) {
     // First tap starts the clock
     gameState.running = true;
+    gameState.windex = -1;
     gameState.lastTickTimestamp = Date.now();
     return;
   }
@@ -106,6 +108,7 @@ setInterval(() => {
         gameState.running = false;
         let winnerIndex = gameState.players.findIndex((p) => p.remainingTime >= 1);
         gameState.currentPlayerIndex = winnerIndex;
+	gameState.windex = winnerIndex;
       }
       broadcastState(roomId);
     }
@@ -212,6 +215,7 @@ const server = Bun.serve({
 	  	room.gameState.players[key].remainingTime = TIME_LIMIT;
 	  });
           broadcastState(roomId);
+	  room.gameState.windex = room.gameState.currentPlayerIndex;
         } else {
           console.warn('Unknown message type:', type);
         }
