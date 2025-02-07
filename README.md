@@ -8,7 +8,7 @@ Chess timer for more than 2 players. It is *pretty* hardcoded currently. We'll f
 `bun run dev --host` for frontend (I know, really good.)
 
 ## TODO:
-* Remove player on ws disconnect
+* ~~Remove player on ws disconnect~~
 * ~~Fireworks displayed for the last player standing~~ DONE
 * ~~Add timer changes.~~ DONE
 * ~~Add resets.~~ DONE
