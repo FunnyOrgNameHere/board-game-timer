@@ -26,7 +26,6 @@ interface RoomState {
 const TIMER_LIMIT = 1.2; // 1.2 minutes
 
 const TIME_LIMIT = TIMER_LIMIT * 60 * 1000; // 5 minutes
-//const MAX_PLAYERS = 3; // up to 6 players
 var rooms: Record<string, RoomState> = {};
 
 function createGameState(timeLimit: number): GameState {
@@ -242,11 +241,12 @@ const server = Bun.serve({
     },
 
     close(ws) {
-      //console.log('WebSocket closed');
+      console.log('WebSocket closed');
       const { roomId } = ws.data || {};
       if (roomId && rooms[roomId]) {
+	      
         rooms[roomId].connections.delete(ws);
-        if(rooms[roomId].connections.length < 1){rooms = rooms.delete(roomId)};
+        if(rooms[roomId].connections.size < 1){delete rooms[roomId];};
       }
     },
   },
