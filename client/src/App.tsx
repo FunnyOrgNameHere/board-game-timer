@@ -159,7 +159,7 @@ export default function App() {
           const isCurrent = idx === gameState.currentPlayerIndex;
 
           return (
-            <div key={player.id} style={{ margin: '1rem 0', borderRadius: "8px", fontSize: '2.25rem', background: isDead(player.name, gameState) ? "red" : (currentCheck(player.name, gameState) ? "green" : "grey") }}>
+            <div key={player.id} style={{ margin: '1rem 0', padding: "0 1rem", borderRadius: "8px", fontSize: '2.25rem', background: isDead(player.name, gameState) ? "red" : (currentCheck(player.name, gameState) ? "green" : "grey") }}>
               <strong>{player.name}</strong> — {minutes}:{formattedSeconds} {(isCurrent && gameState.running) && '(Current)'} {(isCurrent && !gameState.running) && '(WINNER!)'}
             </div>
           );
@@ -167,7 +167,7 @@ export default function App() {
       </div>
 
       <button onClick={handleTap} style={{ width: "100%", height: "400px", background: isDead(username, gameState) ? "red" : (currentCheck(username, gameState) ? "green" : "grey"), color: "white", fontSize: "4rem" }} disabled={!currentCheck(username, gameState)}>
-        Tap
+        {isDead(username, gameState) ? "You're dead!" : (currentCheck(username, gameState) ? "Tap!" : "Wait your turn!")}
       </button>
     </div >
   );
