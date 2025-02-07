@@ -199,6 +199,19 @@ const server = Bun.serve({
             room.gameState.running = false;
           }
           broadcastState(roomId);
+	} else if (type === 'reset') {
+          // Only proceed if the user has joined a room
+          if (!ws.data?.roomId || !ws.data?.playerId) return;
+          const { roomId, playerId } = ws.data;
+          const room = rooms[roomId];
+          if (!room) return;
+          room.gameState.running = false;
+	  //Set all clocks to TIME_LIMIT
+	  
+	  gameState.players.forEach((val, key, set) => {
+	  	room.gameState.players[key].remainingTime = TIME_LIMIT;
+	  });
+          broadcastState(roomId);
         } else {
           console.warn('Unknown message type:', type);
         }
