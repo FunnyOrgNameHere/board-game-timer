@@ -180,7 +180,7 @@ const server = Bun.serve({
           gameState.players.push({
             id: playerId, 
             name: username,
-            remainingTime: TIME_LIMIT,
+            remainingTime: gameState.timeLimit,
           });
 	  }
 
