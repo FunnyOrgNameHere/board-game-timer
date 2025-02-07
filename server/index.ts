@@ -212,9 +212,23 @@ const server = Bun.serve({
 	  //Set all clocks to TIME_LIMIT
 	  
 	  room.gameState.players.forEach((val, key, set) => {
-	  	room.gameState.players[key].remainingTime = TIME_LIMIT;
+	  	room.gameState.players[key].remainingTime = room.gameState.timeLimit;
 	  });
 	  room.gameState.windex = room.gameState.currentPlayerIndex;
+          broadcastState(roomId);
+        } else if (type === 'changeTime') {
+          // Only proceed if the user has joined a room
+          if (!ws.data?.roomId || !ws.data?.playerId) return;
+          const { roomId, playerId, time } = ws.data;
+          const room = rooms[roomId];
+          if (!room) return;
+          room.gameState.running = false;
+	  //Set all clocks to TIME_LIMIT
+	  room.gameState.timeLimit = time;
+	  room.gameState.players.forEach((val, key, set) => {
+	  	room.gameState.players[key].remainingTime = room.gameState.timeLimit;
+	  });
+	  room.gameState.windex = -1;
           broadcastState(roomId);
         } else {
           console.warn('Unknown message type:', type);
