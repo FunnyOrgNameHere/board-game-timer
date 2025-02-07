@@ -10,3 +10,5 @@ I don't know, honestly. `npm install` probably??
 * ~~Add new player to list on join~~ DONE
 * Fireworks displayed for the last player standing
 * Switch current player to last player standing
+* Remove players if their WebSocket closes.
+    * This will also make rejoins... *basically* work.
