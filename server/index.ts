@@ -37,6 +37,7 @@ function createGameState(timeLimit: number): GameState {
     lastTickTimestamp: Date.now(),
     running: false,
     timeLimit: timeLimit,
+    windex: -1,
   };
 }
 
@@ -219,7 +220,8 @@ const server = Bun.serve({
         } else if (type === 'changeTime') {
           // Only proceed if the user has joined a room
           if (!ws.data?.roomId || !ws.data?.playerId) return;
-          const { roomId, playerId, time } = ws.data;
+          const { roomId, playerId } = ws.data;
+	  const { time } = parsed;
           const room = rooms[roomId];
           if (!room) return;
           room.gameState.running = false;
