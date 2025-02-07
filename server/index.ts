@@ -246,7 +246,7 @@ const server = Bun.serve({
       const { roomId } = ws.data || {};
       if (roomId && rooms[roomId]) {
         rooms[roomId].connections.delete(ws);
-        if(rooms[roomId].connections.length < 1){rooms = rooms.delete(roomId)};
+        if(rooms[roomId].connections.length < 1){rooms.delete(roomId)};
       }
     },
   },
