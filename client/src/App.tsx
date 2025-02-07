@@ -84,25 +84,47 @@ export default function App() {
     ws.send(JSON.stringify({ type: 'tap' }));
   };
 
+  const resetGame = () => {
+    if (!ws || ws.readyState !== WebSocket.OPEN) return;
+    ws.send(JSON.stringify({ type: 'reset' }));
+  }
+
+  const showModal = () => {
+    if (window.confirm('Are you sure you want to reset the game?')) {
+      resetGame();
+    }
+  }
+
   return (
-    <div style={{ padding: '1rem' }}>
-      <div style={{ marginBottom: '1rem', display: "flex", flexDirection: 'column', gap: "1rem" }}>
-        <label style={{ fontSize: '1rem' }}>Join or create a room:</label>
-        <input
-          placeholder="Room ID"
-          value={roomId}
-          onChange={(e) => setRoomId(e.target.value)}
-          style={{ marginRight: '0.5rem', fontSize: '1.5rem' }}
-        />
-        <label style={{ fontSize: '1rem' }}>Username:</label>
-        <input
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          style={{ marginRight: '0.5rem', fontSize: '1.5rem' }}
-        />
-        <button onClick={handleJoinRoom} style={{ fontSize: "1.6rem" }}>Join/Create Room</button>
-      </div>
+    <div style={{ padding: '1rem', }}>
+      {gameState && (
+        <button onClick={showModal} style={{ marginBottom: '1rem', fontSize: '1.5rem' }}>
+          Reset {gameState.running ? 'running' : 'stopped'} game in room {roomId}
+        </button>
+
+      )}
+      {
+        !gameState && (
+          <div style={{ marginBottom: '1rem', display: "flex", flexDirection: 'column', gap: "1rem" }}>
+            <label style={{ fontSize: '1rem' }}>Join or create a room:</label>
+            <input
+              placeholder="Room ID"
+              value={roomId}
+              onChange={(e) => setRoomId(e.target.value)}
+              style={{ marginRight: '0.5rem', fontSize: '1.5rem' }}
+            />
+            <label style={{ fontSize: '1rem' }}>Username:</label>
+            <input
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              style={{ marginRight: '0.5rem', fontSize: '1.5rem' }}
+            />
+            <button onClick={handleJoinRoom} style={{ fontSize: "1.6rem" }}>Join/Create Room</button>
+          </div>
+        )
+      }
+
 
       {errorMsg && <div style={{ color: 'red' }}>{errorMsg}</div>}
 
