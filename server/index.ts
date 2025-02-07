@@ -165,7 +165,7 @@ const server = Bun.serve({
 
 
 	//Replace playerId on existing player if they're already here.
-
+	let found = false;
 	  gameState.players.forEach((val, key, set) => {
 	  	if(val.name != username){return;}
 		let time = val.remainingTime;
@@ -176,13 +176,15 @@ const server = Bun.serve({
 			name: username,
 			remainingTime: time
 		})
+		found = true;
 	  });
-
+	  if(!found){
           gameState.players.push({
             id: playerId, 
             name: username,
             remainingTime: TIME_LIMIT,
           });
+	  }
 
           // Store the user’s info on ws.data
           ws.data = { roomId, playerId };
