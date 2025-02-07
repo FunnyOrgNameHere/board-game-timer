@@ -113,7 +113,7 @@ setInterval(() => {
       broadcastState(roomId);
     }
   }
-}, 250);
+}, 50);
 
 
 config();
