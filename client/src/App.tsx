@@ -150,7 +150,7 @@ export default function App() {
             <h1 style={{ fontSize: '2rem', margin: "0 0 1rem 0" }}>Room ID: {roomId}</h1>
             <div style={{ display: "flex", flexDirection: 'row', gap: "1rem", }}>
               <button onClick={showModal} style={{ fontSize: '1.5rem', flex: "1" }}>
-                Reset Game
+                End Game
               </button>
               <button onClick={showTimeModal} style={{ fontSize: '1.5rem', width: "100%", flex: "1" }}>
                 Change Time
@@ -191,11 +191,11 @@ export default function App() {
             const seconds = Math.floor((player.remainingTime % 60000) / 1000);
 
             const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
-            const isCurrent = idx === gameState.currentPlayerIndex;
+            // const isCurrent = idx === gameState.currentPlayerIndex;
 
             return (
               <div key={player.id} style={{ padding: "0 1rem", borderRadius: "8px", fontSize: '2.25rem', background: isDead(player.name, gameState) ? "red" : (currentCheck(player.name, gameState) ? "green" : "grey") }}>
-                <strong>{player.name}</strong> — {minutes}:{formattedSeconds} {(isCurrent && gameState.running) && '(Current)'} {(isCurrent && !gameState.running) && '(WINNER!)'}
+                <strong>{player.name}</strong> — {minutes}:{formattedSeconds}
               </div>
             );
           })}
@@ -206,10 +206,7 @@ export default function App() {
             </button>
           )}
         </div>
-
-
       </div>
-
     </div >
   );
 }
