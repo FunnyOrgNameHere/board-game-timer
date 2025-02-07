@@ -168,14 +168,7 @@ const server = Bun.serve({
 	let found = false;
 	  gameState.players.forEach((val, key, set) => {
 	  	if(val.name != username){return;}
-		let time = val.remainingTime;
-		gameState.players.filter((val2) => val2.name != username);
-		// Bait and switch, if you will.
-		gameState.players.push({
-			id: playerId,
-			name: username,
-			remainingTime: time
-		})
+		gameState.players[key].id = playerId;
 		found = true;
 	  });
 	  if(!found){
