@@ -163,11 +163,23 @@ const server = Bun.serve({
           // Bind the player's ID to this websocket
           const playerId = randomUUID();
 
-          //const newPlayer = [];
-          //newPlayer.id = playerId;
-          //newPlayer.name = username;
+
+	//Replace playerId on existing player if they're already here.
+
+	  gameState.players.forEach((val, key, set) => {
+	  	if(val.name != username){return;}
+		let time = val.remainingTime;
+		gameState.players.delete(val);
+		// Bait and switch, if you will.
+		gameState.players.push({
+			id: playerId,
+			name: username,
+			remainingTime: time
+		})
+	  });
+
           gameState.players.push({
-            id: playerId, // placeholder, replaced once joined
+            id: playerId, 
             name: username,
             remainingTime: TIME_LIMIT,
           });
