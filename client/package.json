@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fireworks-js/react": "^2.10.8",
+    "fireworks-js": "^2.10.8",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

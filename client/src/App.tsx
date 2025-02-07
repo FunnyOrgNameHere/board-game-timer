@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import Fireworks, { FireworksHandlers } from '@fireworks-js/react';
+import { useEffect, useRef, useState } from 'react';
 
 interface Player {
   id: string;
@@ -10,6 +11,7 @@ interface GameState {
   players: Array<Player>;
   currentPlayerIndex: number;
   running: boolean;
+  windex: number;
 }
 
 const isDead = (username: string, gameState: GameState | null): boolean => {
@@ -97,78 +99,115 @@ export default function App() {
 
   const changeTime = (time: number) => {
     if (!ws || ws.readyState !== WebSocket.OPEN) return;
-    ws.send(JSON.stringify({ type: 'changeTime ', time }));
+    console.log(JSON.stringify({ type: 'changeTime', time }));
+    ws.send(JSON.stringify({ type: 'changeTime', time }));
   }
 
   const showTimeModal = () => {
-    const time = prompt('Enter the time in minutes', '5');
+    const time = prompt('Enter the time in minutes', '2.5');
     if (time) {
-      changeTime(parseInt(time) * 60000);
+      changeTime(parseFloat(time) * 60000);
     }
   }
 
-  return (
-    <div style={{ padding: '1rem', width: "100%" }}>
-      {gameState && (
-        <div style={{ width: "100%" }}>
-          <h1 style={{ fontSize: '2rem' }}>Game State</h1>
-          <pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(gameState, null, 2)}</pre>
-          <h1 style={{ fontSize: '2rem' }}>Room ID: {roomId}</h1>
-          <div style={{ marginBottom: '1rem', display: "flex", flexDirection: 'row', gap: "1rem", }}>
-            <button onClick={showModal} style={{ fontSize: '1.5rem', flex: "1" }}>
-              Reset Game
-            </button>
-            <button onClick={showTimeModal} style={{ fontSize: '1.5rem', width: "100%", flex: "1" }}>
-              Change Time
-            </button>
-          </div>
-        </div>
-      )}
+  const fireworksRef = useRef<FireworksHandlers>(null)
 
-      {
-        !gameState && (
-          <div style={{ marginBottom: '1rem', display: "flex", flexDirection: 'column', gap: "1rem" }}>
-            <label style={{ fontSize: '1rem' }}>Join or create a room:</label>
-            <input
-              placeholder="Room ID"
-              value={roomId}
-              onChange={(e) => setRoomId(e.target.value)}
-              style={{ marginRight: '0.5rem', fontSize: '1.5rem' }}
-            />
-            <label style={{ fontSize: '1rem' }}>Username:</label>
-            <input
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              style={{ marginRight: '0.5rem', fontSize: '1.5rem' }}
-            />
-            <button onClick={handleJoinRoom} style={{ fontSize: "1.6rem" }}>Join/Create Room</button>
-          </div>
-        )
+
+  useEffect(() => {
+
+    if (gameState?.windex !== -1) {
+      if (gameState?.players[gameState?.windex].name === username) {
+        fireworksRef.current?.start()
       }
+    }
 
+  }, [gameState, username])
 
-      {errorMsg && <div style={{ color: 'red' }}>{errorMsg}</div>}
+  return (
+    <div style={{ padding: '1rem' }}>
+      <Fireworks
+        ref={fireworksRef}
+        options={{ opacity: 1 }}
+        autostart={false}
 
-      <div style={{ marginTop: '2rem' }}>
-        {gameState?.players.map((player, idx) => {
-          const minutes = Math.floor(player.remainingTime / 60000);
-          const seconds = Math.floor((player.remainingTime % 60000) / 1000);
-
-          const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
-          const isCurrent = idx === gameState.currentPlayerIndex;
-
-          return (
-            <div key={player.id} style={{ margin: '1rem 0', padding: "0 1rem", borderRadius: "8px", fontSize: '2.25rem', background: isDead(player.name, gameState) ? "red" : (currentCheck(player.name, gameState) ? "green" : "grey") }}>
-              <strong>{player.name}</strong> — {minutes}:{formattedSeconds} {(isCurrent && gameState.running) && '(Current)'} {(isCurrent && !gameState.running) && '(WINNER!)'}
+        style={{
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          position: 'fixed',
+          background: 'transparent',
+          pointerEvents: 'none',
+        }}
+      />
+      <div style={{ display: "flex", flexDirection: 'column', gap: "1rem" }}>
+        {gameState && (
+          <div style={{ width: "100%" }}>
+            {/* <h1 style={{ fontSize: '2rem' }}>Game State</h1> */}
+            {/* <pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(gameState, null, 2)}</pre> */}
+            <h1 style={{ fontSize: '2rem', margin: "0 0 1rem 0" }}>Room ID: {roomId}</h1>
+            <div style={{ display: "flex", flexDirection: 'row', gap: "1rem", }}>
+              <button onClick={showModal} style={{ fontSize: '1.5rem', flex: "1" }}>
+                Reset Game
+              </button>
+              <button onClick={showTimeModal} style={{ fontSize: '1.5rem', width: "100%", flex: "1" }}>
+                Change Time
+              </button>
             </div>
-          );
-        })}
+          </div>
+        )}
+
+        {
+          !gameState && (
+            <div style={{ display: "flex", flexDirection: 'column', gap: "1rem" }}>
+              <h1 style={{ fontSize: '2rem', margin: "0" }}>Timer</h1>
+              <label style={{ fontSize: '1rem' }}>Join or create a room:</label>
+              <input
+                placeholder="Room ID"
+                value={roomId}
+                onChange={(e) => setRoomId(e.target.value)}
+                style={{ padding: "0.3rem 0.5rem", fontSize: '1.5rem' }}
+              />
+              <label style={{ fontSize: '1rem' }}>Username:</label>
+              <input
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                style={{ padding: "0.3rem 0.5rem", fontSize: '1.5rem' }}
+              />
+              <button onClick={handleJoinRoom} style={{ fontSize: "1.6rem", background: "green" }}>Join/Create Room</button>
+            </div>
+          )
+        }
+
+
+        {errorMsg && <div style={{ color: 'red' }}>{errorMsg}</div>}
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          {gameState?.players.map((player, idx) => {
+            const minutes = Math.floor(player.remainingTime / 60000);
+            const seconds = Math.floor((player.remainingTime % 60000) / 1000);
+
+            const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+            const isCurrent = idx === gameState.currentPlayerIndex;
+
+            return (
+              <div key={player.id} style={{ padding: "0 1rem", borderRadius: "8px", fontSize: '2.25rem', background: isDead(player.name, gameState) ? "red" : (currentCheck(player.name, gameState) ? "green" : "grey") }}>
+                <strong>{player.name}</strong> — {minutes}:{formattedSeconds} {(isCurrent && gameState.running) && '(Current)'} {(isCurrent && !gameState.running) && '(WINNER!)'}
+              </div>
+            );
+          })}
+
+          {gameState && (
+            <button onClick={handleTap} style={{ width: "100%", height: "400px", background: isDead(username, gameState) ? "red" : (currentCheck(username, gameState) ? "green" : "grey"), color: "white", fontSize: "4rem" }} disabled={!currentCheck(username, gameState)}>
+              {isDead(username, gameState) ? "You're dead!" : (currentCheck(username, gameState) ? "Tap!" : "Wait your turn!")}
+            </button>
+          )}
+        </div>
+
+
       </div>
 
-      <button onClick={handleTap} style={{ width: "100%", height: "400px", background: isDead(username, gameState) ? "red" : (currentCheck(username, gameState) ? "green" : "grey"), color: "white", fontSize: "4rem" }} disabled={!currentCheck(username, gameState)}>
-        {isDead(username, gameState) ? "You're dead!" : (currentCheck(username, gameState) ? "Tap!" : "Wait your turn!")}
-      </button>
     </div >
   );
 }
