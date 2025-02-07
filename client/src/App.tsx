@@ -34,7 +34,7 @@ export default function App() {
   const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
-    const socket = new WebSocket('ws://bgtimer.cool:3000');
+    const socket = new WebSocket('ws://unixtm.dev:3000');
     socket.onopen = () => {
       console.log('Connected to Bun WebSocket server');
     };
