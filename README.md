@@ -1,5 +1,5 @@
 # board-game-timer
-Chess timer for more than 2 players. It is *very* hardcoded currently. We'll fix it eventually.
+Chess timer for more than 2 players. It is *pretty* hardcoded currently. We'll fix it eventually.
 
 ## installing
 I don't know, honestly. `npm install` probably??
@@ -7,8 +7,11 @@ I don't know, honestly. `npm install` probably??
 `bun run index.tsx` or something
 
 ## TODO:
-* ~~Add new player to list on join~~ DONE
-* Fireworks displayed for the last player standing
-* Switch current player to last player standing
+* Fireworks displayed for the last player standing (WIP)
+    * Plan: New message.type value: `sfx`.
+    * Will have a message.effect field for what effect to play.
+    * Should just be, like, `winner` or `fireworks` but nice to have options.
 * Remove players if their WebSocket closes.
     * This will also make rejoins... *basically* work.
+* ~~Add new player to list on join~~ DONE
+* ~~Switch current player to last player standing~~ DONE

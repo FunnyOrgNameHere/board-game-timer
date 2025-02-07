@@ -103,6 +103,8 @@ setInterval(() => {
       updateCurrentPlayerTime(gameState);
       if (isGameOver(gameState)) {
         gameState.running = false;
+        let winnerIndex = gameState.players.findIndex((p) => p.remainingTime >= 1);
+        gameState.currentPlayerIndex = winnerIndex;
       }
       broadcastState(roomId);
     }

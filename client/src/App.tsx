@@ -46,6 +46,12 @@ export default function App() {
           setGameState(message.data);
         } else if (message.type === 'error') {
           setErrorMsg(message.message);
+        } else if (message.type === 'sfx') {
+          //doSFX(message.effect);
+
+          //No clue how to do the logic for doSFX() honestly.
+          //This can be both of our problems.
+          //  -- @UnixTMDev
         }
       } catch (err) {
         console.error('Invalid message from server:', err);
@@ -112,7 +118,7 @@ export default function App() {
 
           return (
             <div key={player.id} style={{ margin: '0.25rem 0', fontSize: '2.25rem', background: isDead(player.name, gameState) ? "red" : (currentCheck(player.name, gameState) ? "green" : "grey") }}>
-              <strong>{player.name}</strong> — {minutes}:{formattedSeconds} {isCurrent && '(Current)'}
+              <strong>{player.name}</strong> — {minutes}:{formattedSeconds} {(isCurrent && gameState.running) && '(Current)'} {(isCurrent && !gameState.running) && '(WINNER!)'}
             </div>
           );
         })}
@@ -124,3 +130,4 @@ export default function App() {
     </div >
   );
 }
+// The wall of text (see line 121) sucks ass, but I'd like to see YOU do better. --@UnixTMDev
