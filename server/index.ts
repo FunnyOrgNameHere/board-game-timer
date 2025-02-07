@@ -141,7 +141,7 @@ const server = Bun.serve({
 
   websocket: {
     open(ws) {
-      console.log('WebSocket opened');
+      //console.log('WebSocket opened');
     },
 
     message(ws, rawMsg) {
@@ -242,11 +242,11 @@ const server = Bun.serve({
     },
 
     close(ws) {
-      console.log('WebSocket closed');
+      //console.log('WebSocket closed');
       const { roomId } = ws.data || {};
       if (roomId && rooms[roomId]) {
         rooms[roomId].connections.delete(ws);
-        rooms[roomId].gameState.players.filter((a) => a != ws);
+        if(rooms[roomId].connections.length < 1){rooms = rooms.delete(roomId)};
       }
     },
   },
