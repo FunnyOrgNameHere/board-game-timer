@@ -208,7 +208,7 @@ const server = Bun.serve({
           room.gameState.running = false;
 	  //Set all clocks to TIME_LIMIT
 	  
-	  gameState.players.forEach((val, key, set) => {
+	  room.gameState.players.forEach((val, key, set) => {
 	  	room.gameState.players[key].remainingTime = TIME_LIMIT;
 	  });
           broadcastState(roomId);
