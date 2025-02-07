@@ -12,6 +12,7 @@ interface GameState {
   currentPlayerIndex: number;
   lastTickTimestamp: number;
   running: boolean;
+  timeLimit: number;
 }
 
 interface RoomState {
@@ -20,26 +21,20 @@ interface RoomState {
 }
 
 // Hard-coded defaults
-const TIMER_LIMIT = .5; // 1.2 minutes
+const TIMER_LIMIT = 1.2; // 1.2 minutes
 
 const DEFAULT_TIME_LIMIT = TIMER_LIMIT * 60 * 1000; // 5 minutes
-const MAX_PLAYERS = 3; // up to 6 players
+//const MAX_PLAYERS = 3; // up to 6 players
 const rooms: Record<string, RoomState> = {};
 
-function createGameState(numPlayers: number, timeLimit: number): GameState {
+function createGameState(timeLimit: number): GameState {
   const players: Array<Player> = [];
-  for (let i = 0; i < numPlayers; i++) {
-    players.push({
-      id: `player_${i}`, // placeholder, replaced once joined
-      name: `Player ${i + 1}`,
-      remainingTime: timeLimit,
-    });
-  }
   return {
-    players,
+    players: players, // No placeholder players
     currentPlayerIndex: 0,
     lastTickTimestamp: Date.now(),
     running: false,
+    timeLimit: timeLimit,
   };
 }
 
@@ -112,7 +107,7 @@ setInterval(() => {
       broadcastState(roomId);
     }
   }
-}, 500);
+}, 250);
 
 const server = Bun.serve({
   port: 3000, hostname: "0.0.0.0",
@@ -145,27 +140,24 @@ const server = Bun.serve({
           // If room doesn't exist, create it
           if (!rooms[roomId]) {
             rooms[roomId] = {
-              gameState: createGameState(MAX_PLAYERS, DEFAULT_TIME_LIMIT),
+              gameState: createGameState(DEFAULT_TIME_LIMIT),
               connections: new Set(),
             };
           }
 
           const { gameState, connections } = rooms[roomId];
-          const unassigned = gameState.players.find((p) =>
-            p.id.startsWith('player_')
-          );
-          if (!unassigned) {
-            // Room full or no placeholders left
-            ws.send(
-              JSON.stringify({ type: 'error', message: 'Room is full.' })
-            );
-            return;
-          }
 
           // Bind the player's ID to this websocket
           const playerId = randomUUID();
-          unassigned.id = playerId;
-          unassigned.name = username;
+
+          //const newPlayer = [];
+          //newPlayer.id = playerId;
+          //newPlayer.name = username;
+          gameState.players.push({
+            id: playerId, // placeholder, replaced once joined
+            name: username,
+            remainingTime: DEFAULT_TIME_LIMIT,
+          });
 
           // Store the user’s info on ws.data
           ws.data = { roomId, playerId };

@@ -6,5 +6,6 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 1337,
+    allowedHosts: ["bgtimer.local", "localhost", "10.0.0.68", "10.0.0.90", "10.0.0.24"],
   },
 })
