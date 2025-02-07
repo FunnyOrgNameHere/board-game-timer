@@ -214,8 +214,8 @@ const server = Bun.serve({
 	  room.gameState.players.forEach((val, key, set) => {
 	  	room.gameState.players[key].remainingTime = TIME_LIMIT;
 	  });
-          broadcastState(roomId);
 	  room.gameState.windex = room.gameState.currentPlayerIndex;
+          broadcastState(roomId);
         } else {
           console.warn('Unknown message type:', type);
         }
