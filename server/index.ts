@@ -24,7 +24,7 @@ interface RoomState {
 // Hard-coded defaults
 const TIMER_LIMIT = 1.2; // 1.2 minutes
 
-const DEFAULT_TIME_LIMIT = TIMER_LIMIT * 60 * 1000; // 5 minutes
+const TIME_LIMIT = TIMER_LIMIT * 60 * 1000; // 5 minutes
 //const MAX_PLAYERS = 3; // up to 6 players
 const rooms: Record<string, RoomState> = {};
 
@@ -153,7 +153,7 @@ const server = Bun.serve({
           // If room doesn't exist, create it
           if (!rooms[roomId]) {
             rooms[roomId] = {
-              gameState: createGameState(DEFAULT_TIME_LIMIT),
+              gameState: createGameState(TIME_LIMIT),
               connections: new Set(),
             };
           }
@@ -163,13 +163,25 @@ const server = Bun.serve({
           // Bind the player's ID to this websocket
           const playerId = randomUUID();
 
-          //const newPlayer = [];
-          //newPlayer.id = playerId;
-          //newPlayer.name = username;
+
+	//Replace playerId on existing player if they're already here.
+
+	  gameState.players.forEach((val, key, set) => {
+	  	if(val.name != username){return;}
+		let time = val.remainingTime;
+		gameState.players.delete(val);
+		// Bait and switch, if you will.
+		gameState.players.push({
+			id: playerId,
+			name: username,
+			remainingTime: time
+		})
+	  });
+
           gameState.players.push({
-            id: playerId, // placeholder, replaced once joined
+            id: playerId, 
             name: username,
-            remainingTime: DEFAULT_TIME_LIMIT,
+            remainingTime: TIME_LIMIT,
           });
 
           // Store the user’s info on ws.data
