@@ -116,8 +116,8 @@ setInterval(() => {
 config();
 
 const isDevelopment = process.env.NODE_ENV === 'development';
-const cert = !isDevelopment ? undefined : Bun.file("/etc/letsencrypt/live/unixtm.dev-0001/fullchain.pem");
-const key = !isDevelopment ? undefined : Bun.file("/etc/letsencrypt/live/unixtm.dev-0001/privkey.pem");
+const cert = isDevelopment ? undefined : Bun.file("/etc/letsencrypt/live/unixtm.dev-0001/fullchain.pem");
+const key = isDevelopment ? undefined : Bun.file("/etc/letsencrypt/live/unixtm.dev-0001/privkey.pem");
 
 const server = Bun.serve({
   port: 3000, hostname: "0.0.0.0",
