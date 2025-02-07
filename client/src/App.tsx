@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Player {
   id: string;
@@ -86,8 +86,6 @@ export default function App() {
 
   return (
     <div style={{ padding: '1rem' }}>
-      <h1>Multiplayer Chess Clock</h1>
-
       <div style={{ marginBottom: '1rem', display: "flex", flexDirection: 'column', gap: "1rem" }}>
         <label style={{ fontSize: '1rem' }}>Join or create a room:</label>
         <input
@@ -117,7 +115,7 @@ export default function App() {
           const isCurrent = idx === gameState.currentPlayerIndex;
 
           return (
-            <div key={player.id} style={{ margin: '0.25rem 0', fontSize: '2.25rem', background: isDead(player.name, gameState) ? "red" : (currentCheck(player.name, gameState) ? "green" : "grey") }}>
+            <div key={player.id} style={{ margin: '1rem 0', borderRadius: "8px", fontSize: '2.25rem', background: isDead(player.name, gameState) ? "red" : (currentCheck(player.name, gameState) ? "green" : "grey") }}>
               <strong>{player.name}</strong> — {minutes}:{formattedSeconds} {(isCurrent && gameState.running) && '(Current)'} {(isCurrent && !gameState.running) && '(WINNER!)'}
             </div>
           );

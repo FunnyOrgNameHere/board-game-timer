@@ -1,5 +1,6 @@
 // server.ts
 import { randomUUID } from 'crypto';
+import { config } from 'dotenv';
 
 interface Player {
   id: string; // Unique ID bound to a WebSocket
@@ -111,10 +112,18 @@ setInterval(() => {
   }
 }, 250);
 
+
+config();
+
+const isDevelopment = process.env.NODE_ENV === 'development';
+const cert = !isDevelopment ? undefined : Bun.file("/etc/letsencrypt/live/unixtm.dev-0001/fullchain.pem");
+const key = !isDevelopment ? undefined : Bun.file("/etc/letsencrypt/live/unixtm.dev-0001/privkey.pem");
+
 const server = Bun.serve({
   port: 3000, hostname: "0.0.0.0",
-  cert: Bun.file("/etc/letsencrypt/live/unixtm.dev-0001/fullchain.pem"),
-  key: Bun.file("/etc/letsencrypt/live/unixtm.dev-0001/privkey.pem"),
+  
+  cert: cert,
+  key: key,
   // This fetch handler attempts to upgrade every incoming request to a WebSocket.
   // If it’s not a WS request, we just return a standard response.
   fetch(req, server) {
@@ -200,10 +209,6 @@ const server = Bun.serve({
       // Optional: If you want to free up the player slot on disconnect, do it here
     },
   },
-
-  // 'development: true' is optional; not documented in the official docs but may
-  // be recognized by Bun. If it causes issues, remove it.
-  development: true,
 });
 
 console.log(`Server running at http://localhost:${server.port}`);
