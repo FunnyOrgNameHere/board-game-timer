@@ -2,17 +2,16 @@
 Chess timer for more than 2 players. It is *pretty* hardcoded currently. We'll fix it eventually.
 
 ## installing
-I don't know, honestly. `npm install` probably??
+`bun install` in client and server folders
 ## running
-`bun run index.tsx` or something
+`bun run index.tsx` for backend
+`bun run dev --host` for frontend (I know, really good.)
 
 ## TODO:
-* Fireworks displayed for the last player standing (WIP)
-    * Plan: New message.type value: `sfx`.
-    * Will have a message.effect field for what effect to play.
-    * Should just be, like, `winner` or `fireworks` but nice to have options.
-* Add timer changes. (only when running == false)
-* Add resets.
+* Remove player on ws disconnect
+* ~~Fireworks displayed for the last player standing~~ DONE
+* ~~Add timer changes.~~ DONE
+* ~~Add resets.~~ DONE
 * ~~Make rejoining actually work~~ DONE
 * ~~Add new player to list on join~~ DONE
 * ~~Switch current player to last player standing~~ DONE
