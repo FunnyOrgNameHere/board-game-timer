@@ -246,8 +246,8 @@ const server = Bun.serve({
       const { roomId } = ws.data || {};
       if (roomId && rooms[roomId]) {
         rooms[roomId].connections.delete(ws);
+        rooms[roomId].gameState.players.filter((a) => a != ws);
       }
-      // Optional: If you want to free up the player slot on disconnect, do it here
     },
   },
 });
