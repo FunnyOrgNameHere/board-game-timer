@@ -113,6 +113,8 @@ setInterval(() => {
 
 const server = Bun.serve({
   port: 3000, hostname: "0.0.0.0",
+  cert: Bun.file("/etc/letsencrypt/live/unixtm.dev-0001/fullchain.pem"),
+  key: Bun.file("/etc/letsencrypt/live/unixtm.dev-0001/privkey.pem"),
   // This fetch handler attempts to upgrade every incoming request to a WebSocket.
   // If it’s not a WS request, we just return a standard response.
   fetch(req, server) {
