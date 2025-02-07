@@ -169,7 +169,7 @@ const server = Bun.serve({
 	  gameState.players.forEach((val, key, set) => {
 	  	if(val.name != username){return;}
 		let time = val.remainingTime;
-		while(gameState.players.delete(val)){;}
+		gameState.players.filter((val2) => val2.name != username);
 		// Bait and switch, if you will.
 		gameState.players.push({
 			id: playerId,
