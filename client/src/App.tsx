@@ -48,12 +48,6 @@ export default function App() {
           setGameState(message.data);
         } else if (message.type === 'error') {
           setErrorMsg(message.message);
-        } else if (message.type === 'sfx') {
-          //doSFX(message.effect);
-
-          //No clue how to do the logic for doSFX() honestly.
-          //This can be both of our problems.
-          //  -- @UnixTMDev
         }
       } catch (err) {
         console.error('Invalid message from server:', err);
@@ -75,7 +69,7 @@ export default function App() {
     ws.send(
       JSON.stringify({
         type: 'joinRoom',
-        roomId,
+        roomId: roomId.toLowerCase(),
         username,
       })
     );
@@ -150,7 +144,7 @@ export default function App() {
             <h1 style={{ fontSize: '2rem', margin: "0 0 1rem 0" }}>Room ID: {roomId}</h1>
             <div style={{ display: "flex", flexDirection: 'row', gap: "1rem", }}>
               <button onClick={showModal} style={{ fontSize: '1.5rem', flex: "1" }}>
-                End Game
+                {gameState.running ? 'End Game' : 'Restart Game'}
               </button>
               <button onClick={showTimeModal} style={{ fontSize: '1.5rem', width: "100%", flex: "1" }}>
                 Change Time
