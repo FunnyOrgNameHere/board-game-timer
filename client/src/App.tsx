@@ -95,14 +95,36 @@ export default function App() {
     }
   }
 
-  return (
-    <div style={{ padding: '1rem', }}>
-      {gameState && (
-        <button onClick={showModal} style={{ marginBottom: '1rem', fontSize: '1.5rem' }}>
-          Reset {gameState.running ? 'running' : 'stopped'} game in room {roomId}
-        </button>
+  const changeTime = (time: number) => {
+    if (!ws || ws.readyState !== WebSocket.OPEN) return;
+    ws.send(JSON.stringify({ type: 'changeTime ', time }));
+  }
 
+  const showTimeModal = () => {
+    const time = prompt('Enter the time in minutes', '5');
+    if (time) {
+      changeTime(parseInt(time) * 60000);
+    }
+  }
+
+  return (
+    <div style={{ padding: '1rem', width: "100%" }}>
+      {gameState && (
+        <div style={{ width: "100%" }}>
+          <h1 style={{ fontSize: '2rem' }}>Game State</h1>
+          <pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(gameState, null, 2)}</pre>
+          <h1 style={{ fontSize: '2rem' }}>Room ID: {roomId}</h1>
+          <div style={{ marginBottom: '1rem', display: "flex", flexDirection: 'row', gap: "1rem", }}>
+            <button onClick={showModal} style={{ fontSize: '1.5rem', flex: "1" }}>
+              Reset Game
+            </button>
+            <button onClick={showTimeModal} style={{ fontSize: '1.5rem', width: "100%", flex: "1" }}>
+              Change Time
+            </button>
+          </div>
+        </div>
       )}
+
       {
         !gameState && (
           <div style={{ marginBottom: '1rem', display: "flex", flexDirection: 'column', gap: "1rem" }}>
