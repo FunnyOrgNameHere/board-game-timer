@@ -1,5 +1,7 @@
 # board-game-timer
-Chess timer for more than 2 players. It is *pretty* hardcoded currently. We'll fix it eventually.
+Chess timer for more than 2 players. made in... javascript ;(
+
+try it out [here](https://timer.unixtm.dev)!
 
 ## installing
 `bun install` in client and server folders
