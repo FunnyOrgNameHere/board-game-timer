@@ -140,13 +140,13 @@ const server = Bun.serve({
 
   websocket: {
     open(ws) {
-      //console.log('WebSocket opened');
+      ////console.log('WebSocket opened');
     },
 
     message(ws, rawMsg) {
       try {
         const parsed = JSON.parse(rawMsg.toString());
-	console.log(rawMsg.toString());
+	//console.log(rawMsg.toString());
         const { type } = parsed;
 
         if (type === 'joinRoom') {
@@ -241,7 +241,7 @@ const server = Bun.serve({
     },
 
     close(ws) {
-      console.log('WebSocket closed');
+      //console.log('WebSocket closed');
       const { roomId } = ws.data || {};
       if (roomId && rooms[roomId]) {
 	      
@@ -252,4 +252,4 @@ const server = Bun.serve({
   },
 });
 
-console.log(`Server running at http://localhost:${server.port}`);
+console.log(`Server running at ws(s)://${server.host}:${server.port}`);
